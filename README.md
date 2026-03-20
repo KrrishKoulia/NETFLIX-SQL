@@ -18,7 +18,21 @@ The data for this project is sourced from the Kaggle dataset:
 
 - **Dataset Link:** [Movies Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
 
-## Schema
+-- TABLE SCHEMA
+-- ============================================================================
+-- show_id: Unique identifier for each title
+-- type: Movie or TV Show
+-- title: Name of the movie/show
+-- director: Director name(s)
+-- casts: Actor names
+-- country: Country of production
+-- date_added: Date content was added to Netflix
+-- release_year: Original release year
+-- rating: Content rating (PG, R, TV-MA, etc.)
+-- duration: Length (minutes for movies, seasons for TV shows)
+-- listed_in: Genres/categories
+-- description: Plot summary
+-- ============================================================================
 
 ```sql
 DROP TABLE IF EXISTS netflix;
@@ -49,6 +63,7 @@ SELECT
 FROM netflix
 GROUP BY type
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Determine the distribution of content types on Netflix.
 
@@ -72,6 +87,7 @@ FROM
 WHERE 
     ranking = 1;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Identify the most frequently occurring rating for each type of content.
 
@@ -83,6 +99,7 @@ FROM netflix
 WHERE type = 'Movie' 
 AND release_year = 2020;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Retrieve all movies released in a specific year.
 
@@ -98,6 +115,7 @@ GROUP BY individual_country
 ORDER BY total_content DESC
 LIMIT 5;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Identify the top 5 countries with the highest number of content items.
 
@@ -113,6 +131,7 @@ WHERE type = 'Movie'
 ORDER BY CAST(REPLACE(duration, ' min', '') AS INTEGER) DESC
 LIMIT 10;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Find the movie with the longest duration.
 
@@ -122,6 +141,7 @@ LIMIT 10;
 SELECT * FROM netflix
 WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Retrieve content added to Netflix in the last 5 years.
 
@@ -131,6 +151,7 @@ WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years'
 SELECT title , DIRECTOR FROM NETFLIX
 WHERE director ILIKE  '%Rajiv Chilaka%';
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** List all content directed by 'Rajiv Chilaka'.
 
@@ -142,6 +163,7 @@ FROM netflix
 WHERE type = 'TV Show'
   AND SPLIT_PART(duration, ' ', 1)::INT > 5;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Identify TV shows with more than 5 seasons.
 
@@ -155,6 +177,7 @@ FROM netflix
 GROUP BY individual_listed_in
 ORDER BY total_content DESC;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Count the number of content items in each genre.
 
@@ -171,6 +194,7 @@ WHERE country ILIKE '%India%'
 GROUP BY year
 ORDER BY year;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Calculate and rank years by the average number of content releases by India.
 
@@ -185,6 +209,7 @@ WHERE listed_in ILIKE '%documentaries%';
 SELECT * FROM NETFLIX
 WHERE DIRECTOR IS NULL;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Retrieve all movies classified as documentaries.
 
@@ -194,6 +219,7 @@ WHERE DIRECTOR IS NULL;
 SELECT * FROM NETFLIX
 WHERE DIRECTOR IS NULL;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** List content that does not have a director.
 
@@ -210,6 +236,7 @@ WHERE casts ILIKE '%Salman Khan%'
   AND release_year >= EXTRACT(YEAR FROM CURRENT_DATE) - 10
 ORDER BY release_year DESC;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Count the number of movies featuring 'Salman Khan' in the last 10 years.
 
@@ -226,6 +253,7 @@ GROUP BY individual_actor
 ORDER BY total_count DESC
 LIMIT 10;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Identify the top 10 actors with the most appearances in Indian-produced movies.
 
@@ -241,6 +269,7 @@ SELECT
 FROM netflix
 GROUP BY category;
 ```
+-- ----------------------------------------------------------------------------
 
 **Objective:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
 
